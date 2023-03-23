@@ -128,6 +128,8 @@ typedef struct rocksdb_wal_iterator_t rocksdb_wal_iterator_t;
 typedef struct rocksdb_wal_readoptions_t rocksdb_wal_readoptions_t;
 typedef struct rocksdb_memory_consumers_t rocksdb_memory_consumers_t;
 typedef struct rocksdb_memory_usage_t rocksdb_memory_usage_t;
+typedef struct rocksdb_write_buffer_manager_t  rocksdb_write_buffer_manager_t;
+typedef struct rocksdb_sst_file_manager_t rocksdb_sst_file_manager_t;
 
 /* DB operations */
 
@@ -2347,6 +2349,19 @@ rocksdb_options_set_memtable_whole_key_filtering(rocksdb_options_t*,
 
 extern ROCKSDB_LIBRARY_API void rocksdb_cancel_all_background_work(
     rocksdb_t* db, unsigned char wait);
+
+extern ROCKSDB_LIBRARY_API void rocksdb_ratelimiter_set_bytes_per_second(rocksdb_ratelimiter_t*, int64_t);
+extern ROCKSDB_LIBRARY_API rocksdb_write_buffer_manager_t* rocksdb_write_buffer_manager_create(
+    size_t buffer_size);
+extern ROCKSDB_LIBRARY_API void rocksdb_options_set_write_buffer_manager(
+    rocksdb_options_t *opt, rocksdb_write_buffer_manager_t *wbm);
+//extern ROCKSDB_LIBRARY_API void rocksdb_write_buffer_manager_set_buffer_size(rocksdb_write_buffer_manager_t *wbm, size_t size);
+extern ROCKSDB_LIBRARY_API void rocksdb_write_buffer_manager_destory(rocksdb_write_buffer_manager_t *wbm);
+extern ROCKSDB_LIBRARY_API void rocksdb_set_dboptions(
+    rocksdb_t* db, int count, const char* const keys[], const char* const values[], char** errptr);
+extern ROCKSDB_LIBRARY_API rocksdb_sst_file_manager_t* rocksdb_sst_file_manager_create(rocksdb_env_t* env);
+extern ROCKSDB_LIBRARY_API void rocksdb_options_set_sst_file_manager(rocksdb_options_t *opt, rocksdb_sst_file_manager_t *sfm);
+extern ROCKSDB_LIBRARY_API void rocksdb_sst_file_manager_destory(rocksdb_sst_file_manager_t *sfm);
 
 #ifdef __cplusplus
 }  /* end extern "C" */
